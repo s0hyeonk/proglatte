@@ -14,9 +14,13 @@ def get_exchange_rate(to_currency='USD'):
         "searchdate": today,
         "data": "AP01"
     }
+    headers = {
+    "User-Agent": "Mozilla/5.0",
+   }
+    print("인증서 경로:", certifi.where())
 
     try:
-        response = requests.get(url, params=params, timeout=5, verify=certifi.where())
+        response = requests.get(url, params=params, headers=headers, timeout=5, verify=False)
         data = response.json()
         for item in data:
             if 'USD' in item["cur_unit"]:
