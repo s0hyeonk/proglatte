@@ -5,9 +5,9 @@ import certifi
 API_KEY = "ur52Cn8VansiPR78cMZdHB9NdXh7OkwM"
 
 def get_exchange_rate(to_currency='USD'):
-    today = datetime.now().strftime("%Y%m%d")  # 오늘 날짜 형식: 20240525
+    today = datetime.now().strftime("%Y%m%d")  
     url = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON"
-    print("📅 요청 날짜:", today)
+    print("요청 날짜:", today)
 
     params = {
         "authkey": API_KEY,
