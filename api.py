@@ -21,6 +21,8 @@ def get_exchange_rate(to_currency='USD'):
 
     try:
         response = requests.get(url, params=params, headers=headers, timeout=5, verify=False)
+        print("응답 상태코드:", response.status_code)
+        print("응답 텍스트:", response.text)
         data = response.json()
         for item in data:
             if 'USD' in item["cur_unit"]:
