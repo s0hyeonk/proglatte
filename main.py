@@ -32,6 +32,12 @@ juce_items = {
     "포도주스": 6000
 }
 
+tea_items = {
+    "얼그레이": 5000,
+    "페퍼민트": 4000,
+    "루이보스": 4000,
+    "캐모마일": 4000
+}
 
 usd_rate = api.get_exchange_rate('USD')
 if not usd_rate:
@@ -58,8 +64,14 @@ window.geometry("1920x1080")
 
 tk.Label(window, text="M e n u", font=("Arial", 80)).pack(pady=10)
 
-tk.Label(window, text="caffee", anchor="w", font=("Arial", 40)).pack(pady=0, padx=100, fill="x")
-tk.Frame(window, width=340, height=1, bg="black").pack(padx=10, pady=5)
+top_frame = tk.Frame(window)
+top_frame.pack(pady=10)
+
+left = tk.Frame(top_frame)
+left.grid(row=0, column=0, padx=(0, 30))
+
+tk.Label(left, text="caffee", anchor="w", font=("Arial", 40)).pack(anchor="w")
+tk.Frame(left, height=1, bg="black").pack(fill="x", pady=5)
 
 for name, price in caffee_items.items():
     if not usd_rate:
@@ -71,11 +83,14 @@ for name, price in caffee_items.items():
     else:
         text = f"{name}                                                        {price}원"
     
-    btn = tk.Button(window, text=text, font=20, command=lambda n=name, p=price: add_item(n, p))
+    btn = tk.Button(left, text=text, font=20, anchor="w", command=lambda n=name, p=price: add_item(n, p))
     btn.pack(pady=5)
 
-tk.Label(window, text="ade", anchor="w", font=("Arial", 40)).pack(pady=0, padx=100, fill="x")
-tk.Frame(window, width=340, height=1, bg="black").pack(padx=10, pady=5)
+right = tk.Frame(top_frame)
+right.grid(row=0, column=1, padx=(70, 0))
+
+tk.Label(right, text="ade", anchor="w", font=("Arial", 40)).pack(anchor="w")
+tk.Frame(right, width=340, height=1, bg="black").pack(fill="x", pady=5)
 
 for name, price in ade_items.items():
     if not usd_rate:
@@ -87,24 +102,49 @@ for name, price in ade_items.items():
     else:
         text = f"{name}                                                        {price}원"
     
-    btn = tk.Button(window, text=text, font=20, command=lambda n=name, p=price: add_item(n, p))
+    btn = tk.Button(right, text=text, font=20, command=lambda n=name, p=price: add_item(n, p))
     btn.pack(pady=5)
 
-tk.Label(window, text="juce", anchor="w", font=("Arial", 40)).pack(pady=0, padx=100, fill="x")
-tk.Frame(window, width=340, height=1, bg="black").pack(padx=10, pady=5)
+bottom_frame = tk.Frame(window)
+bottom_frame.pack(pady=10)
+
+left_bottom = tk.Frame(bottom_frame)
+left_bottom.grid(row=0, column=0, padx=(0, 50))
+
+tk.Label(left_bottom, text="juce", anchor="w", font=("Arial", 40)).pack(anchor="w")
+tk.Frame(left_bottom, height=1, bg="black").pack(fill="x")
+
 for name, price in juce_items.items():
     if not usd_rate:
         usd_rate = api.get_exchange_rate('USD')  
 
     if usd_rate:
         usd_price = round(price * usd_rate, 2)
-        text = f"{name}                                      {price}원 (약 ${usd_price})"
+        text = f"{name}                                       {price}원 (약 ${usd_price})"
     else:
-        text = f"{name}                                                        {price}원"
+        text = f"{name}                                                         {price}원"
     
-    btn = tk.Button(window, text=text, font=20, command=lambda n=name, p=price: add_item(n, p))
+    btn = tk.Button(left_bottom, text=text, font=20, command=lambda n=name, p=price: add_item(n, p))
     btn.pack(pady=5)
 
+right_bottom = tk.Frame(bottom_frame)
+right_bottom.grid(row=0, column=1, padx=(50, 0))
+
+tk.Label(right_bottom, text="tea", anchor="w", font=("Arial", 40)).pack(anchor="w")
+tk.Frame(right_bottom, height=1, bg="black").pack(fill="x")
+
+for name, price in tea_items.items():
+    if not usd_rate:
+        usd_rate = api.get_exchange_rate('USD')  
+
+    if usd_rate:
+        usd_price = round(price * usd_rate, 2)
+        text = f"{name}                                        {price}원 (약 ${usd_price})"
+    else:
+        text = f"{name}                                                          {price}원"
+    
+    btn = tk.Button(right_bottom, text=text, font=20, command=lambda n=name, p=price: add_item(n, p))
+    btn.pack(pady=5)
 
 tk.Button(window, text="총 금액 보기", command=show_total).pack(pady=10)
 
