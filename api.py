@@ -20,7 +20,7 @@ def get_exchange_rate(to_currency='USD'):
     print("인증서 경로:", certifi.where())
 
     try:
-        response = requests.get(url, params=params, headers=headers, timeout=5, verify=False)
+        response = requests.get(url, params=params, headers=headers, timeout=5, verify=certifi.where())
         print("응답 상태코드:", response.status_code)
         print("응답 텍스트:", response.text)
         data = response.json()
