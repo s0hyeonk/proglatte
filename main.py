@@ -4,6 +4,9 @@ import importlib
 import cal
 importlib.reload(cal)
 
+import tkinter.messagebox
+
+
 import order
 order.connect_db()
 
@@ -19,9 +22,9 @@ caffee_items = {
 }
 
 ade_items = {
-    "레몬에이드": 4000,
-    "자몽에이드": 5500,
-    "청포도에이드": 5500,
+    "레몬에이드": 5000,
+    "자몽에이드": 5000,
+    "청포도에이드": 5000,
     "유자에이드": 5000,
 }
 
@@ -34,9 +37,9 @@ juce_items = {
 
 tea_items = {
     "얼그레이": 5000,
-    "페퍼민트": 4000,
-    "루이보스": 4000,
-    "캐모마일": 4000
+    "페퍼민트": 5000,
+    "루이보스": 5000,
+    "캐모마일": 5000
 }
 
 usd_rate = api.get_exchange_rate('USD')
@@ -46,23 +49,12 @@ if not usd_rate:
 def add_item(name, price):
     cal.add_to_cart(name, price)
     qty = cal.cart[name][0] 
-    status_label.config(text=f"{name} 추가됨! (수량: {qty})")
-
-def show_total():
-    total = cal.get_total_price()
-    usd_rate = api.get_exchange_rate("USD") 
     
-    if usd_rate:
-        usd_total = round(total * usd_rate, 2)
-        status_label.config(text=f"총 금액: {total}원 (약 ${usd_total})")
-    else:
-        status_label.config(text=f"총 금액: {total}원 (환율 정보 없음)")
-
 window = tk.Tk()
 window.title("카페 키오스크")
 window.geometry("1920x1080")
 
-tk.Label(window, text="M e n u", font=("Arial", 80)).pack(pady=10)
+tk.Label(window, text="M e n u", font=("Arial", 80)).pack(pady=20)
 
 top_frame = tk.Frame(window)
 top_frame.pack(pady=10)
@@ -111,7 +103,7 @@ bottom_frame.pack(pady=10)
 left_bottom = tk.Frame(bottom_frame)
 left_bottom.grid(row=0, column=0, padx=(0, 50))
 
-tk.Label(left_bottom, text="juce", anchor="w", font=("Arial", 40)).pack(anchor="w")
+tk.Label(left_bottom, text="juice", anchor="w", font=("Arial", 40)).pack(anchor="w")
 tk.Frame(left_bottom, height=1, bg="black").pack(fill="x")
 
 for name, price in juce_items.items():
@@ -126,6 +118,31 @@ for name, price in juce_items.items():
     
     btn = tk.Button(left_bottom, text=text, font=20, command=lambda n=name, p=price: add_item(n, p))
     btn.pack(pady=5)
+
+def show_cart():
+    if not cal.cart:
+        tk.messagebox.showinfo("장바구니", "장바구니가 비어 있습니다!")
+        return
+
+    cart_text = "장바구니 내역:\n"
+    for menu, (qty, price) in cal.cart.items():
+        cart_text += f"{menu} x{qty} - {qty * price}원\n"
+    
+    total = cal.get_total_price()
+    cart_text += f"\n총 금액: {total}원"
+    def clear_order():
+       cal.clear_cart()
+       showcart.destroy()
+
+
+    showcart = tk.Toplevel(left_bottom)
+    showcart.title("장바구니 내역") 
+    showcart.geometry("400x400")
+    tk.Label(showcart, text=cart_text, justify="left", fg="black").pack(pady=10)
+    tk.Button(showcart, text="장바구니 비우기", command=clear_order).pack(pady=10)
+    tk.Button(showcart, text="닫기", command=showcart.destroy).pack(pady=10)
+    
+tk.Button(left_bottom, text="장바구니", font=(100), command=show_cart).pack(pady=50, padx=(500, 0))
 
 right_bottom = tk.Frame(bottom_frame)
 right_bottom.grid(row=0, column=1, padx=(50, 0))
@@ -146,16 +163,9 @@ for name, price in tea_items.items():
     btn = tk.Button(right_bottom, text=text, font=20, command=lambda n=name, p=price: add_item(n, p))
     btn.pack(pady=5)
 
-tk.Button(window, text="총 금액 보기", command=show_total).pack(pady=10)
-
-tk.Button(window, text="관리자 화면", command=lambda: admin.open_admin_window(window, status_label)).pack(pady=10)
-
-status_label = tk.Label(window, text="메뉴를 선택해주세요!", fg="blue")
-status_label.pack(pady=20)
-
 def order_popup():
     if not cal.cart:
-        status_label.config(text="장바구니가 비었습니다.")
+        tk.messagebox.showwarning("알림", "장바구니가 비었습니다!")
         return
 
     total = cal.get_total_price()
@@ -181,17 +191,14 @@ def order_popup():
     def restart_order():
         cal.clear_cart()
         popup.destroy()
-        status_label.config(text="메뉴를 선택해주세요!")
-
+    
     tk.Button(popup, text="메뉴로 돌아가기", command=restart_order).pack(pady=5)
     tk.Button(popup, text="종료", command=close_all).pack(pady=5)
 
 def clear_order():
     cal.clear_cart()
-    status_label.config(text="장바구니 내역이 초기화되었습니다!")
 
-tk.Button(window, text="주문하기", font=(20), command=order_popup).pack(pady=5)
-
-tk.Button(window, text="장바구니 비우기", command=clear_order).pack(pady=5)
+tk.Button(right_bottom, text="주문하기", font=(100), command=order_popup).pack(pady=50, padx=(0, 500))
+tk.Button(window, text="관리자 화면", command=lambda: admin.open_admin_window(window)).pack(pady=50)
 
 window.mainloop()
