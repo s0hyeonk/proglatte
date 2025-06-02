@@ -137,10 +137,10 @@ def show_cart():
 
     showcart = tk.Toplevel(left_bottom)
     showcart.title("장바구니 내역") 
-    showcart.geometry("400x400")
-    tk.Label(showcart, text=cart_text, justify="left", fg="black").pack(pady=10)
-    tk.Button(showcart, text="장바구니 비우기", command=clear_order).pack(pady=10)
-    tk.Button(showcart, text="닫기", command=showcart.destroy).pack(pady=10)
+    showcart.geometry("350x350")
+    tk.Label(showcart, text=cart_text, font="50", justify="left", fg="black").pack(pady=10)
+    tk.Button(showcart, text="장바구니 비우기", font="40", command=clear_order).pack(pady=10)
+    tk.Button(showcart, text="닫기", font="40", command=showcart.destroy).pack(pady=10)
     
 tk.Button(left_bottom, text="장바구니", font=(100), command=show_cart).pack(pady=50, padx=(500, 0))
 
@@ -160,7 +160,7 @@ for name, price in tea_items.items():
     else:
         text = f"{name}                                                          {price}원"
     
-    btn = tk.Button(right_bottom, text=text, font=20, command=lambda n=name, p=price: add_item(n, p))
+    btn = tk.Button(right_bottom, text=text, font=40, command=lambda n=name, p=price: add_item(n, p))
     btn.pack(pady=5)
 
 def order_popup():
@@ -172,7 +172,7 @@ def order_popup():
 
     popup = tk.Toplevel(window)
     popup.title("주문 완료")
-    popup.geometry("280x240")
+    popup.geometry("350x350")
 
     summary_text = ""
     for menu, (qty, price) in cal.cart.items():
@@ -181,8 +181,8 @@ def order_popup():
         order.insert_order(menu, qty, qty * price)
     summary_text += f"\n총 금액: {total}원"
 
-    tk.Label(popup, text="주문이 완료되었습니다!", font=("Arial", 12)).pack(pady=5)
-    tk.Label(popup, text=summary_text, justify="center", fg="black").pack(pady=5)
+    tk.Label(popup, text="주문이 완료되었습니다!", font=("Arial", 15)).pack(pady=5)
+    tk.Label(popup, text=summary_text, font="40", justify="center", fg="black").pack(pady=5)
 
     def close_all():
         cal.clear_cart()
@@ -192,8 +192,8 @@ def order_popup():
         cal.clear_cart()
         popup.destroy()
     
-    tk.Button(popup, text="메뉴로 돌아가기", command=restart_order).pack(pady=5)
-    tk.Button(popup, text="종료", command=close_all).pack(pady=5)
+    tk.Button(popup, text="메뉴로 돌아가기", font="40", command=restart_order).pack(pady=5)
+    tk.Button(popup, text="종료", font="40", command=close_all).pack(pady=5)
 
 def clear_order():
     cal.clear_cart()
