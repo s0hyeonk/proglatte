@@ -5,7 +5,6 @@ def connect_db():
     cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS orders (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
             menu_name TEXT,
             quantity INTEGER,
             price INTEGER,
@@ -28,7 +27,7 @@ def insert_order(menu_name, quantity, price):
 def get_all_orders():
     conn = sqlite3.connect("kiosk.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT id, menu_name, quantity, price, order_time FROM orders")
+    cursor.execute("SELECT menu_name, quantity, price, order_time FROM orders")
     rows = cursor.fetchall()
     conn.close()
     return rows

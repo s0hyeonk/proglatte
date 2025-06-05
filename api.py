@@ -13,18 +13,15 @@ def get_exchange_rate(to_currency='USD'):
         "searchdate": today,
         "data": "AP01"
     }
-    headers = {
-    "User-Agent": "Mozilla/5.0",
-   }
 
     try:
-        response = requests.get(url, params=params, headers=headers, timeout=5, verify=certifi.where())
+        response = requests.get(url, params=params, timeout=5, verify=certifi.where())
         data = response.json()
         for item in data:
             if 'USD' in item["cur_unit"]:
                 return float(item["deal_bas_r"].replace(",", ""))
     except:
-        response = requests.get(url, params=params, headers=headers, timeout=5, verify=False)
+        response = requests.get(url, params=params, timeout=5, verify=False)
         data = response.json()
         for item in data:
             if 'USD' in item["cur_unit"]:
