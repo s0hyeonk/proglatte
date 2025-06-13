@@ -76,7 +76,7 @@ right = tk.Frame(top)
 right.grid(row=0, column=1, padx=(70, 0))
 
 tk.Label(right, text="ade", font=("Arial", 40)).pack(anchor="w")
-tk.Frame(right, width=340, height=1, bg="black").pack(fill="x", pady=5)
+tk.Frame(right, height=1, bg="black").pack(fill="x", pady=5)
 
 for name, price in ade.items():
     if not usd_rate:
@@ -94,11 +94,12 @@ for name, price in ade.items():
 bottom = tk.Frame(window)
 bottom.pack(pady=10)
 
-left2 = tk.Frame(bottom)
-left2.grid(row=0, column=0, padx=(0, 50))
 
-tk.Label(left2, text="juice", font=("Arial", 40)).pack(anchor="w")
-tk.Frame(left2, height=1, bg="black").pack(fill="x")
+left2 = tk.Frame(bottom)
+left2.grid(row=0, column=0, padx=(130, 0))
+
+tk.Label(left2, text="juice", font=("Arial", 40)).pack(anchor="w", padx=(90,0))
+tk.Frame(left2, height=1, width="440", bg="black").pack(padx=(40,0))
 
 for name, price in juce.items():
     if not usd_rate:
@@ -110,8 +111,8 @@ for name, price in juce.items():
     else:
         text = f"{name}                                                         {price}원"
     
-    btn = tk.Button(left2, text=text, font=20, command=lambda n=name, p=price: add_item(n, p))
-    btn.pack(pady=5)
+    btn = tk.Button(left2, text=text, font=20, anchor="w", command=lambda n=name, p=price: add_item(n, p))
+    btn.pack(pady=5, padx=(45, 0))
 
 def show_cart():
     if not cal.cart:
@@ -139,10 +140,10 @@ def show_cart():
 tk.Button(left2, text="장바구니", font=(100), command=show_cart).pack(pady=50, padx=(500, 0))
 
 right2 = tk.Frame(bottom)
-right2.grid(row=0, column=1, padx=(50, 0))
+right2.grid(row=0, column=1, padx=(0, 130))
 
-tk.Label(right2, text="tea", anchor="w", font=("Arial", 40)).pack(anchor="w")
-tk.Frame(right2, height=1, bg="black").pack(fill="x")
+tk.Label(right2, text="tea", font=("Arial", 40)).pack(anchor="w", padx=(40,0))
+tk.Frame(right2, height=1, width=450, bg="black").pack(anchor="w", padx=(40,0))
 
 for name, price in tea.items():
     if not usd_rate:
@@ -154,8 +155,8 @@ for name, price in tea.items():
     else:
         text = f"{name}                                                          {price}원"
     
-    btn = tk.Button(right2, text=text, font=40, command=lambda n=name, p=price: add_item(n, p))
-    btn.pack(pady=5)
+    btn = tk.Button(right2, text=text, font=40, anchor="w", command=lambda n=name, p=price: add_item(n, p))
+    btn.pack(pady=5, padx=(10, 60))
 
 def order_popup():
     if not cal.cart:
